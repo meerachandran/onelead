@@ -1,0 +1,37 @@
+<html>
+<body>
+	<form action="/example/batchform" method="POST">
+	
+	{% csrf_token %}
+	<table style="border: 1px solid #9f9f9f;" cellspacing="10">
+			<tr>
+				<td>
+					<label for="name">Batch Name:</label>
+				</td>
+				<td>
+					<input type="text" id="name" name="name" />
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<label for="startdate">Start Date:</label>
+				</td>
+				<td>
+					<input type="text" id="startdate" name="startdate" />
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<label for="enddate">Start Date:</label>
+				</td>
+				<td>
+					<input type="text" id="enddate" name="enddate" />
+				</td>
+			</tr>
+		</table>
+
+		<button  type="submit" name="submitButton" value="Submit">Submit</button>
+	</form>
+</body>
+</html>
+

@@ -1,0 +1,89 @@
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Demo: BorderContainer</title>
+		<link rel="stylesheet" href="/static/style.css" media="screen">
+		<link rel="stylesheet" href="/static/dijit/themes/claro/claro.css" media="screen">
+		<!-- load dojo and provide config via data attribute -->
+		<script src="/static/dojo/dojo.js" data-dojo-config="parseOnLoad: true">
+		</script>
+		<script>
+			dojo.require("dojo.parser");
+			dojo.require("dijit.layout.BorderContainer");
+			dojo.require("dijit.layout.ContentPane");
+			dojo.require(["dojo/parser", "dijit/form/DateTextBox"]);
+		  dojo.require(["dijit/form/TextBox"])
+			dojo.require(["custom/AttnDateTextBox"]);
+		</script>
+	</head>
+	<body class="claro">
+		<div id="appLayout" class="demoLayout" data-dojo-type="dijit.layout.BorderContainer" data-dojo-props="design: 'headline'">
+			<div class="centerPanel" data-dojo-type="dijit.layout.ContentPane" data-dojo-props="region: 'center'">
+				<div>
+      <form action="/attendance/submitstudents" method="POST">
+					<label for="admndate">Admission Date:</label>
+<input type="text" name="admndate" id="admndate" value="2005-12-30"
+    data-dojo-type="custom/AttnDateTextBox"
+    required="true" />
+</div>
+<div>
+					<label for="sname">Student Name:</label>
+<input type="text" name="sname" id="sname" value=""
+    data-dojo-type="custom/AttnTextBox"
+    required="true" />
+</div>
+<div>
+<label for="ephno">Emergency Phone no:</label>
+<input type="text" name="ephno" id="ephno" value=""
+    data-dojo-type="custom/AttnTextBox"
+    required="true" />
+</div>
+<div>
+<label for="semail">Email:</label>
+<input type="text" name="semail" id="semail" value=""
+    data-dojo-type="custom/AttnTextBox"
+    required="true" />
+</div>
+<div>
+<label for="sparents">Parents:</label>
+<input type="text" name="sparents" id="sparents" value=""
+    data-dojo-type="custom/AttnTextBox"
+    required="true" />
+</div>
+<div>
+<label for="ehistory">Edu. History:</label>
+<input type="text" name="ehistory" id="ehistory" value=""
+    data-dojo-type="custom/AttnTextBox"
+    required="true" />
+</div>
+<div>
+<label for="mno">Mobile No:</label>
+<input type="text" name="mno" id="mno" value=""
+    data-dojo-type="custom/AttnTextBox"
+    required="true" />
+</div>
+<div>
+<label for="gender">Gender:</label>
+<select data-dojo-type="dijit/form/ComboBox" id="gender" name="gender">
+    <option>Female</option>
+    <option>male</option>
+</select>
+</div>
+<div>
+<button id="progButtonNode" type="button"></button>
+<div id="result1"></div>
+</div>
+</form>
+<div>
+					
+				</div>
+				<div>
+					
+				</div>
+			</div>
+			<div class="edgePanel" data-dojo-type="dijit.layout.ContentPane" data-dojo-props="region: 'top'">Header content (top)</div>
+			<div id="leftCol" class="edgePanel" data-dojo-type="dijit.layout.ContentPane" data-dojo-props="region: 'left', splitter: true">Sidebar content (left)</div>
+		</div>
+	</body>
+</html>
+
