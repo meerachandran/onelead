@@ -6,7 +6,7 @@ from django.template import RequestContext, loader
 
 
 from django.http import HttpResponse
-from example.models import Batch
+from leaddb.models import Batch
 
 
 #This one is for dojo based ajax request demo
@@ -19,7 +19,7 @@ def batch_form(request):
 		return HttpResponse(template.render(context))
 	else:
 		#Acessing form using a POST method(may be an ajax call} , so save the data and say "saved"
-		print request.POST['name']
+		print request.POST['helllos']
 		#create a Batch object and set variables and save
 		batch=Batch()
 		batch.name=request.POST['name']
@@ -35,12 +35,11 @@ def batch_form(request):
 		for batch in batches:
 			dbdata=dbdata+" "+batch.name
 		print dbdata
-		return HttpResponse("Saved one, so total :"+dbdata)
+		return HttpResponse("saved")
 
 #Simple form without dojo
 #difference is only in the template
 def batch_form_simple(request):
-	print request
 	if request.method == 'GET':
 		#Acessing form using a GET method , so deliver a form
 		template = loader.get_template('batch_form_simple.html')
@@ -59,13 +58,8 @@ def batch_form_simple(request):
 		batch.save()
 		
 		#retrieve all saved data and send bak to dojo
-		dbdata=""
-		batches=Batch.objects.all() #Retrieve all batches from db
-		for batch in batches:
-			dbdata=dbdata+" "+batch.name
-		print dbdata
-		#Instead of this render the form again
-		return HttpResponse("Saved one, so total :"+dbdata)
+		
+		return HttpResponse(request.session['logined'])
 
 
 

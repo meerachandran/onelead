@@ -69,9 +69,5 @@ require(["dojo/parser", "dijit/form/Form", "dijit/form/Button", "dijit/form/Vali
 		<button data-dojo-type="dijit/form/Button" type="submit" name="submitButton" value="Submit">Submit</button>
 		<button data-dojo-type="dijit/form/Button" type="reset">Reset</button>
 	</div>
-</body>
-</html>
-
-
 
 {% endblock %}

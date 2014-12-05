@@ -7,7 +7,7 @@ require(["dojo/parser", "dijit/form/Form", "dijit/form/Button", "dijit/form/Vali
 </script>
 </head>
 <body class="claro">
-	<div data-dojo-type="dijit/form/Form" id="batchForm" data-dojo-id="batchForm" encType="multipart/form-data" action= method="POST">
+	<div data-dojo-type="dijit/form/Form" id="batchForm" data-dojo-id="batchForm" encType="multipart/form-data" action="" method="POST">
 		{% csrf_token %}
 		<script type="dojo/on" data-dojo-event="reset">
 			return confirm('Press OK to reset widget values');
@@ -69,9 +69,5 @@ require(["dojo/parser", "dijit/form/Form", "dijit/form/Button", "dijit/form/Vali
 		<button data-dojo-type="dijit/form/Button" type="submit" name="submitButton" value="Submit">Submit</button>
 		<button data-dojo-type="dijit/form/Button" type="reset">Reset</button>
 	</div>
-</body>
-</html>
-
-
 
 {% endblock %}
