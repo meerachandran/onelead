@@ -41,7 +41,8 @@ INSTALLED_APPS = (
 	'attendance',
 	'example',
 	'leadadmin',
-	'leaddb'
+	'leaddb',
+	'batch'
 )
 
 MIDDLEWARE_CLASSES = (
