@@ -1,0 +1,168 @@
+{% extends "base.html" %}
+
+{% block formcontent %}
+
+<script>
+require(["dojo/parser", "dijit/form/Form", "dijit/form/Button", "dijit/form/ValidationTextBox", "dijit/form/DateTextBox"]);
+</script>
+</head>
+<body class="claro">
+	<div data-dojo-type="dijit/form/Form" id="batchForm" data-dojo-id="batchForm" encType="multipart/form-data" action= method="POST">
+		{% csrf_token %}
+		<script type="dojo/on" data-dojo-event="reset">
+			return confirm('Press OK to reset widget values');
+		</script>
+		<script type="dojo/on" data-dojo-event="submit">
+			dojo.stopEvent(event);
+			if(this.validate()){
+				
+				//compose post args
+				var xhrArgs = {
+					url:"/faculty/addfaculty",
+					form: dojo.byId("addFaculty"),
+					handleAs: "text",
+					load: function(data){ // server send back some good news
+						alert(data);
+					},
+					error: function(error){
+						alert(error);
+ 					}
+				}
+				//post data to server
+				var deferred = dojo.xhrPost(xhrArgs);
+			}
+			else{
+				alert('Form contains invalid data.  Please correct first');
+				return false;
+			}
+			return true;
+		</script>
+
+		<table style="border: 1px solid #9f9f9f;" cellspacing="10">
+			<tr>
+				<td>
+					<label for="name">Staff Name:</label>
+				</td>
+				<td>
+					<input type="text" id="name" name="name" required="true" data-dojo-type="dijit/form/ValidationTextBox"/>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<label for="empno">Emp.No:</label>
+				</td>
+				<td>
+					<input type="text" id="empno" name="empno" data-dojo-type="dijit/form/ValidationTextBox"/>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<label for="gender">Gender:</label>
+				</td>
+				<td>
+					<input type="text" id="gender" name="gender" data-dojo-type="dijit/form/ValidationTextBox"/>
+				</td>
+			</tr>
+      <tr>
+				<td>
+					<label for="address">Address:</label>
+				</td>
+				<td>
+					<input type="text" id="address" name="address" required="true" data-dojo-type="dijit/form/ValidationTextBox"/>
+				</td>
+			</tr>
+      <tr>
+				<td>
+					<label for="ephno">Emergency Phone No:</label>
+				</td>
+				<td>
+					<input type="text" id="ephno" name="ephno" required="true" data-dojo-type="dijit/form/ValidationTextBox"/>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<label for="mno">Mobile Phone No:</label>
+				</td>
+				<td>
+					<input type="text" id="mno" name="mno" required="true" data-dojo-type="dijit/form/ValidationTextBox"/>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<label for="email">Email:</label>
+				</td>
+				<td>
+					<input type="text" id="email" name="email" required="true" data-dojo-type="dijit/form/ValidationTextBox"/>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<label for="ehistory">Education History:</label>
+				</td>
+				<td>
+					<input type="text" id="ehistory" name="ehistory" required="true" data-dojo-type="dijit/form/ValidationTextBox"/>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<label for="jdate:">Joined Date:</label>
+				</td>
+				<td>
+					<input type="text" id="jdate" name="jdate" required="true" data-dojo-type="dijit/form/ValidationTextBox"/>
+				</td>
+			</tr>
+      <tr>
+				<td>
+					<label for="jdate:">Joined Date:</label>
+				</td>
+				<td>
+					<input type="text" id="jdate" name="jdate" required="true" data-dojo-type="dijit/form/ValidationTextBox"/>
+				</td>
+			</tr>
+		</table>
+		<button data-dojo-type="dijit/form/Button" type="submit" name="submitButton" value="Submit">Submit</button>
+		<button data-dojo-type="dijit/form/Button" type="reset">Reset</button>
+
+<script>
+  require(["dojox/grid/DataGrid", "dojox/grid/cells", "dojox/grid/cells/dijit",
+    "dojo/date/locale", "dojo/currency", "dijit/form/DateTextBox", "dijit/form/CurrencyTextBox",
+    "dijit/form/HorizontalSlider", "dojo/domReady!"
+], function(DataGrid, cells, cellsDijit, locale, currency, DateTextBox, CurrencyTextBox, HorizontalSlider){
+    function formatCurrency(inDatum){
+        return isNaN(inDatum) ? '...' : currency.format(inDatum, this.constraint);
+    }
+    function formatDate(inDatum){
+        return locale.format(new Date(inDatum), this.constraint);
+    }
+    gridLayout = [{
+        defaultCell: { width: 8, editable: true, type: cells._Widget, styles: 'text-align: right;'  },
+        cells: [
+            { name: 'Id', field: 'id', editable: false, width: 2 /* Can't edit ID's of dojo/store items */ },
+            { name: 'Date', field: 'col8', width: 10, editable: true,
+                widgetClass: DateTextBox,
+                formatter: formatDate,
+                constraint: {formatLength: 'long', selector: "date"}},
+            { name: 'Priority', styles: 'text-align: center;', field: 'col1', width: 10,
+                type: cells.ComboBox,
+                options: ["normal","note","important"]},
+            { name: 'Mark', field: 'col2', width: 5, styles: 'text-align: center;',
+                type: cells.CheckBox},
+            { name: 'Status', field: 'col3',
+                styles: 'text-align: center;',
+                type: cells.Select,
+                options: ["new", "read", "replied"] },
+            { name: 'Message', field: 'col4', styles: '', width: 10 },
+            { name: 'Amount', field: 'col5', formatter: formatCurrency, constraint: {currency: 'EUR'},
+                widgetClass: CurrencyTextBox, width: "auto" },
+            { name: 'Amount', field: 'col5', formatter: formatCurrency, constraint: {currency: 'EUR'},
+                widgetClass: HorizontalSlider, width: 10}
+        ]
+    }];
+</script>
+</div>
+</body>
+</html>
+
+
+
+{% endblock %}
