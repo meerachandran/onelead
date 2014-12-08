@@ -1,7 +1,7 @@
 from django.conf.urls import patterns, url
 
-from example import views
+from faculty import views
 
 urlpatterns = patterns('',
-    url(r'^addfaculty', views.batch_form_simple, name='add_faculty'),
+		url(r'^addfaculty', views.add_faculty, name='add_faculty'),
 )

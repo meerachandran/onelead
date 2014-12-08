@@ -1,0 +1,94 @@
+{% extends "base_batch.html" %}
+
+{% block formcontent %}
+
+<script>
+require(["dojo/parser", "dijit/form/Form", "dijit/form/Button", "dijit/form/ValidationTextBox", "dijit/form/DateTextBox", "dijit/form/ComboBox"]);
+</script>
+</head>
+<body class="claro">
+	<div data-dojo-type="dijit/form/Form" id="batchForm" data-dojo-id="batchForm" encType="multipart/form-data" action= method="POST">
+		{% csrf_token %}
+		<script type="dojo/on" data-dojo-event="reset">
+			return confirm('Press OK to reset widget values');
+		</script>
+		<script type="dojo/on" data-dojo-event="submit">
+			dojo.stopEvent(event);
+			if(this.validate()){
+				
+				//compose post args
+				var xhrArgs = {
+					url:"/batch/batchform",
+					form: dojo.byId("batchForm"),
+					handleAs: "text",
+					load: function(data){ // server send back some good news
+						alert(data);
+					},
+					error: function(error){
+						alert(error);
+ 					}
+				}
+				//post data to server
+				var deferred = dojo.xhrPost(xhrArgs);
+			}
+			else{
+				alert('Form contains invalid data.  Please correct first');
+				return false;
+			}
+			return true;
+		</script>
+
+		<table style="border: 1px solid #9f9f9f;" cellspacing="10">
+			<tr>
+				<td>
+					<label for="name">Batch Name:</label>
+				</td>
+				<td>
+					<input type="text" id="name" name="name" required="true" data-dojo-type="dijit/form/ValidationTextBox"/>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<label for="startdate">Start Date:</label>
+				</td>
+				<td>
+					<input type="text" id="startdate" name="startdate" data-dojo-type="dijit/form/DateTextBox"/>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<label for="enddate">Start Date:</label>
+				</td>
+				<td>
+					<input type="text" id="enddate" name="enddate" data-dojo-type="dijit/form/DateTextBox"/>
+				</td>
+			</tr>
+      <tr>
+				<td>
+					<label for="name">Status:</label>
+				</td>
+				<td>
+					<select data-dojo-type="dijit/form/ComboBox" id="status" name="status">
+    				<option>Finished</option>
+    				<option selected>Live</option>
+					</select>
+				</td>
+			</tr>
+      <tr>
+				<td>
+					<label for="name">Current Semester:</label>
+				</td>
+				<td>
+					<input type="text" id="csem" name="csem" required="true" data-dojo-type="dijit/form/ValidationTextBox"/>
+				</td>
+			</tr>
+		</table>
+		<button data-dojo-type="dijit/form/Button" type="submit" name="submitButton" value="Submit">Submit</button>
+		<button data-dojo-type="dijit/form/Button" type="reset">Reset</button>
+</div>
+</body>
+</html>
+
+
+
+{% endblock %}
