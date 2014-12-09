@@ -1,0 +1,121 @@
+{% extends "base_attendance.html" %}
+
+{% block formcontent %}
+
+<script>
+require(["dojo/parser", "dijit/form/Form", "dijit/form/Button", "dijit/form/ValidationTextBox", "dijit/form/DateTextBox", "dojox/validate/web", "dijit/form/Textarea", "dijit/form/ComboBox", "dijit/form/CheckBox"]);
+</script>
+</head>
+<body class="claro">
+	<div data-dojo-type="dijit/form/Form" id="attendanceForm" data-dojo-id="attendanceForm" encType="multipart/form-data" action= method="POST">
+		{% csrf_token %}
+		<script type="dojo/on" data-dojo-event="reset">
+			return confirm('Press OK to reset widget values');
+		</script>
+		<script type="dojo/on" data-dojo-event="submit">
+			dojo.stopEvent(event);
+			if(this.validate()){
+				
+				//compose post args
+				var xhrArgs = {
+					url:"/attendance/addattendance",
+					form: dojo.byId("attendanceForm"),
+					handleAs: "text",
+					load: function(data){ // server send back some good news
+						alert(data);
+					},
+					error: function(error){
+						alert(error);
+ 					}
+				}
+				//post data to server
+				var deferred = dojo.xhrPost(xhrArgs);
+			}
+			else{
+				alert('Form contains invalid data.  Please correct first');
+				return false;
+			}
+			return true;
+		</script>
+
+		<table style="border: 1px solid #9f9f9f;" cellspacing="10">
+			<tr>
+				<td>
+					<label for="ttslot">Time Table Slot:</label>
+				</td>
+				<td>
+					<select data-dojo-type="dijit/form/ComboBox" id="ttslott" name="ttslot" >
+   					 <option>Slot1</option>
+    				<option selected>Slot2</option>
+    				<option>Slot3</option>
+					</select>
+				</td>
+			</tr>
+      <tr>
+				<td>
+					<label for="sbatch">Batch:</label>
+				</td>
+				<td>
+					<select data-dojo-type="dijit/form/ComboBox" id="sbatch" name="sbatch">
+   					 <option>Batch1</option>
+    				<option selected>Batch2</option>
+    				<option>Batch3</option>
+					</select>
+				</td>
+			</tr>
+      <tr>
+      <td>
+        <input id="present" name="present" data-dojo-type="dijit/form/CheckBox" value="test"/> <label for="present">Enable if marking present students</label>
+         </td>
+			</tr>
+			<tr>
+				<td>
+					<label for="students">Enable to mark attendance:</label>
+				</td>
+				     
+         {% for student in student_list %}
+         <tr>
+         <td> 
+        <input id="student{{student.id}}" name="student{{student.id}}" data-dojo-type="dijit/form/CheckBox" value="{{student.id}}" /> <label for="student">{{  student.name }}</label>
+         </td>
+         </tr>
+				{% endfor %}  
+			</tr>
+			<tr>
+				<td>
+					<label for="added_date">Added Date:</label>
+				</td>
+				<td>
+					<input type="text" id="added_date" name="added_date" required="true" data-dojo-type="dijit/form/DateTextBox"/>
+				</td>
+			</tr>
+      <tr>
+				<td>
+					<label for="event_date">Event Date:</label>
+				</td>
+				<td>
+					<input type="text" id="event_date" name="event_date" required="true" data-dojo-type="dijit/form/DateTextBox"/>
+				</td>
+			</tr>
+      <tr>
+				<td>
+					<label for="sdevice">Source Device:</label>
+				</td>
+				<td>
+					<select data-dojo-type="dijit/form/ComboBox" id="sdevice" name="sdevice">
+    				<option>Thumb reader</option>
+    				<option selected>Manual entry</option>
+          </select>
+				</td>
+			</tr>
+		</table>
+		<button data-dojo-type="dijit/form/Button" type="submit" name="submitButton" value="Submit">Submit</button>
+		<button data-dojo-type="dijit/form/Button" type="reset">Reset</button>
+
+</div>
+</body>
+</html>
+
+
+
+{% endblock %}
