@@ -19,7 +19,6 @@ def batch_form(request):
 		return HttpResponse(template.render(context))
 	else:
 		#Acessing form using a POST method(may be an ajax call} , so save the data and say "saved"
-		print request.POST['helllos']
 		#create a Batch object and set variables and save
 		batch=Batch()
 		batch.name=request.POST['name']
@@ -35,7 +34,7 @@ def batch_form(request):
 		for batch in batches:
 			dbdata=dbdata+" "+batch.name
 		print dbdata
-		return HttpResponse("saved")
+		return HttpResponse("saved"+dbdata)
 
 #Simple form without dojo
 #difference is only in the template

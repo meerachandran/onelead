@@ -77,7 +77,8 @@ class Attendance(models.Model):
 	added_date=models.DateTimeField()
 	event_date=models.DateField()
 	source_device = models.CharField(max_length=200)
-	status_of_student = models.CharField(max_length=10)	
+	status_of_student = models.CharField(max_length=10)
+
 	
 
 
