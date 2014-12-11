@@ -2,11 +2,14 @@ from django.shortcuts import render
 
 from django.template import RequestContext, loader
 
+from django.http import HttpResponse
+from leaddb.models import TimeTable
 
-def time_table(request):
+
+def index(request):
 	if request.method == 'GET':
 		#Acessing form using a GET method , so deliver a form
-		template = loader.get_template('batch_form.html')
+		template = loader.get_template('time_table.html')
 		context = RequestContext(request)
 		print context
 		return HttpResponse(template.render(context))

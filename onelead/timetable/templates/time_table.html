@@ -1,104 +1,127 @@
-{% extends "base.html" %}
+{% extends "time_base.html" %}
 
 {% block formcontent %}
-
 <script>
 require(["dojo/parser", "dijit/form/Form", "dijit/form/Button", "dijit/form/ValidationTextBox", "dijit/form/DateTextBox"]);
 </script>
-</head>
-<body class="claro">
-	<div data-dojo-type="dijit/form/Form" id="batchForm" data-dojo-id="batchForm" encType="multipart/form-data" action="" method="POST">
-		{% csrf_token %}
-		<script type="dojo/on" data-dojo-event="reset">
-			return confirm('Press OK to reset widget values');
-		</script>
-		<script type="dojo/on" data-dojo-event="submit">
-			dojo.stopEvent(event);
-			if(this.validate()){
-				
-				//compose post args
-				var xhrArgs = {
-					url:"/example/batchform",
-					form: dojo.byId("batchForm"),
-					handleAs: "text",
-					load: function(data){ // server send back some good news
-						alert(data);
-					},
-					error: function(error){
-						alert(error);
- 					}
-				}
-				//post data to server
-				var deferred = dojo.xhrPost(xhrArgs);
-			}
-			else{
-				alert('Form contains invalid data.  Please correct first');
-				return false;
-			}
-			return true;
-		</script>
-		
 
-</table>
+<script>
+require(["dojo/parser", "dojo/ready", "dojox/calendar/Calendar","dojo/store/Observable", "dojo/store/Memory"],
+function(parser, ready, Calendar,Observable,Memory){
+	ready(function(){
+		var someData = [
+	{
+		id: 0,
+		summary: "Event 1",
+		startTime: new Date(2012, 0, 1, 10, 0),
+		endTime: new Date(2012, 0, 1, 12, 0)
+	},
+	{
+		id: 0,
+		summary: "Event 1",
+		startTime: new Date(2012, 0, 2, 10, 0),
+		endTime: new Date(2012, 0, 2, 12, 0)
+	}
+	];
 
-		<table style="border: 1px solid #9f9f9f;" cellspacing="10">
-			<tr>
-				<td>
-					<label for="name">Batch Name:</label>
-				</td>
-				<td>
-					<input type="text" id="name" name="name" required="true" data-dojo-type="dijit/form/ValidationTextBox"/>
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<label for="startdate">Start Date:</label>
-				</td>
-				<td>
-					<input type="text" id="startdate" name="startdate" data-dojo-type="dijit/form/DateTextBox"/>
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<label for="enddate">Start Date:</label>
-				</td>
-				<td>
-					<input type="text" id="enddate" name="enddate" data-dojo-type="dijit/form/DateTextBox"/>
-				</td>
-			</tr>
-		</table>
-
-		<button data-dojo-type="dijit/form/Button" type="button" onClick="console.log(batchForm.getValues())">Get Values from form!</button>
-		<button data-dojo-type="dijit/form/Button" type="submit" name="submitButton" value="Submit">Submit</button>
-		<button data-dojo-type="dijit/form/Button" type="reset">Reset</button>
-	</div>
-	<script>
-
-		require([
-			"dojox/grid/DataGrid",
-			"dojox/data/JsonRestStore",
-			"dojo/request",
-			"dojo/domReady!"
-		], function(DataGrid,JsonRestStore, request){
-				poStore = new dojox.data.JsonRestStore({target:"/example/api/batch/", idAttribute:"id"});
-				gridLayout =  [
-						{ name: "Id", field: "id", width: "25%" },
-						{ name: "Name", field: "name", width: "25%" },
-						{ name: "Start Date", field: "start_date", width: "25%" },
-						{ name: "End Date", field: "end_date", width: "25%" },
-						{ name: "Status", field: "status", width: "25%" },
-						{ name: "Current Sem", field: "semester", width: "25%" }
-						
-					]
-				console.log(poStore);
-				var grid = new dojox.grid.DataGrid({
-					store: poStore['objects'],
-					structure: gridLayout
-					}, dojo.byId("grid"));
-				grid.startup();
-		});
-
-	</script>
-	<div id="grid"></div>
+	calendar = new Calendar({
+		date: new Date(),
+		store: new Observable(new Memory({data: someData})),
+		dateInterval: "week",
+		props:"matrixViewProps:{expandDuration:0,refStartTime:12.00}",
+		style: "position:relative;width:500px;height:500px"
+	}, "calender");
 	
+	
+	id=0;
+	var createItem = function(view, d, e, subColumn){
+	  // create item by maintaining control key
+		if(!e.ctrlKey || e.shiftKey || e.altKey){
+			return;
+		}
+		var start, end;
+		var colView = calendar.columnView;
+		var cal = calendar.dateModule;
+		if(view == colView){
+			start = calendar.floorDate(d, "minute", colView.timeSlotDuration);
+			end = cal.add(start, "minute", colView.timeSlotDuration);
+		}else{
+			start = calendar.floorToDay(d);
+			end = cal.add(start, "day", 1);
+		}
+		var item = {
+			id: id,
+			summary: "New event " + id,
+			startTime: start,
+			endTime: end,
+			allDay: view.viewKind == "matrix"
+		};
+		id++;
+		
+		return item;
+	}
+	calendar.set("createOnGridClick", true);
+	calendar.set("createItemFunc", createItem);
+	
+	
+	
+
+	}
+)}
+);
+</script>
+	
+<table>
+	<tr>
+		<td>
+			<div id=calender>
+			</div>
+		</td>
+		<td>
+			<div data-dojo-type="dijit/form/Form" id="myForm" data-dojo-id="myForm"
+			encType="multipart/form-data" action="" method="">
+				<script type="dojo/on" data-dojo-event="reset">
+					return confirm('Press OK to reset widget values');
+				</script>
+
+				<script type="dojo/on" data-dojo-event="submit">
+					if(this.validate()){
+						return confirm('Form is valid, press OK to submit');
+					}else{
+						alert('Form contains invalid data.  Please correct first');
+						return false;
+					}
+					return true;
+				</script>
+
+				<table style="border: 1px solid #9f9f9f;" cellspacing="10">
+					<tr>
+						<td>
+						    <label for="name">Name:</label>
+						</td>
+						<td>
+						    <input type="text" id="name" name="name" required="true" data-dojo-type="dijit/form/ValidationTextBox"/>
+						</td>
+					</tr>
+					<tr>
+						<td>
+						    <label for="dob">Date of birth:</label>
+						</td>
+						<td>
+						    <input type="text" id="dob" name="dob" data-dojo-type="dijit/form/DateTextBox"/>
+						</td>
+					</tr>
+				</table>
+
+				<button data-dojo-type="dijit/form/Button" type="button" onClick="console.log(myForm.getValues())">Get Values from form!</button>
+				<button data-dojo-type="dijit/form/Button" type="submit" name="submitButton" value="Submit">Submit</button>
+				<button data-dojo-type="dijit/form/Button" type="reset">Reset</button>
+			</div>
+		</td>
+	</tr>
+</table>
+	
+	
+
+
 {% endblock %}

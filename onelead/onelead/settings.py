@@ -43,7 +43,9 @@ INSTALLED_APPS = (
 	'leadadmin',
 	'leaddb',
 	'batch',
-	'faculty'
+	'faculty',
+	'student',
+	'timetable'
 )
 
 MIDDLEWARE_CLASSES = (

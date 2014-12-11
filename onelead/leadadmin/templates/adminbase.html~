@@ -18,22 +18,7 @@
     dojo.require(["dojo/parser", "dijit/layout/TabContainer", "dijit/layout/ContentPane"]);
     dojo.require(["dojo/dom"]);
     </script>
-<script>    
 
-	require(["dojo/ready","dojo/dom"], function(ready,dom){
-		ready(function(){
-		
-		dijit.byId("timetable").set("content", dojo.create("iframe", {
-		"src": "/example/batchformsimple",
-		"style": "border: 0; width: 100%; height: 100%"
-		})); 
-	
-	
-		});
-	});
-
-
-</script>
 </head>
 
 <body class="claro">

@@ -69,13 +69,13 @@ class TimeTable(models.Model):
 	geo_location=models.CharField(max_length=50)
 	notify=models.CharField(max_length=5)
 	summary=models.CharField(max_length=200)
+	subject=models.ForeignKey(Subject)
 
 
 class Attendance(models.Model):
 	time_table_slot=models.ForeignKey(TimeTable)
 	student=models.ForeignKey(Student)
 	added_date=models.DateTimeField()
-	event_date=models.DateField()
 	source_device = models.CharField(max_length=200)
 	status_of_student = models.CharField(max_length=10)
 
