@@ -3,7 +3,7 @@
 {% block formcontent %}
 
 <script>
-require(["dojo/parser", "dijit/form/Form", "dijit/form/Button", "dijit/form/ValidationTextBox", "dijit/form/DateTextBox", "dojox/validate/web", "dijit/form/Textarea", "dijit/form/ComboBox", "dijit/form/CheckBox"]);
+require(["dojo/parser", "dijit/form/Form", "dijit/form/Button", "dijit/form/ValidationTextBox", "dijit/form/DateTextBox", "dojox/validate/web", "dijit/form/Textarea", "dijit/form/ComboBox", "dijit/form/CheckBox","dijit/form/Select"]);
 </script>
 </head>
 <body class="claro">
@@ -37,29 +37,75 @@ require(["dojo/parser", "dijit/form/Form", "dijit/form/Button", "dijit/form/Vali
 			}
 			return true;
 		</script>
+		<script>
+		function fillSlots()
+		{
+			require(["dijit/form/Select", "dojo/store/Memory",
+						"dojo/json","dojo/domReady!"],
+						function(Select, Memory, json){
+							require(['dojo/_base/xhr'], function(xhr){
+							xhr.get({
+								url:"/attendance/getslots.json", handleAs:"text",
+								content: {
+									date: dojo.byId("added_date").value
+								},
+								load: function(data){
+									var stateStore = new Memory({
+									idProperty: "id",
+									data: json.parse(data)
+								});
+	 
+								// create Select widget, populating its options from the store
+									var select = new Select({
+									name: "timeslot",
+									store: stateStore,
+									style: "width: 200px;",
+									labelAttr: "summary",
+									 maxHeight: -1, // tells _HasDropDown to fit menu within viewport
+									onChange: function(value){
+									}
+								}, "slots");
+								select.startup();
+					
+
+
+							}
+							});
+					});
+					
+            // create store instance referencing data from states.json
+           
+        });
+		}
+		</script>
+
 
 		<table style="border: 1px solid #9f9f9f;" cellspacing="10">
+			<tr>
+				<td>
+					<label for="added_date">Added Date:</label>
+				</td>
+				<td>
+					<input type="text" id="added_date" name="added_date" required="true" data-dojo-type="dijit/form/DateTextBox"  onChange="fillSlots()" data-dojo-props="datePattern:'dd-MM-yyyy'"/>
+				</td>
+			</tr>
 			<tr>
 				<td>
 					<label for="ttslot">Time Table Slot:</label>
 				</td>
 				<td>
-					<select data-dojo-type="dijit/form/ComboBox" id="ttslott" name="ttslot" >
-   					 <option>Slot1</option>
-    				<option selected>Slot2</option>
-    				<option>Slot3</option>
-					</select>
+				<div id='slots' ></div>
+   					
+					
 				</td>
 			</tr>
-      <tr>
+      		<tr>
 				<td>
 					<label for="sbatch">Batch:</label>
 				</td>
 				<td>
 					<select data-dojo-type="dijit/form/ComboBox" id="sbatch" name="sbatch">
-   					 <option>Batch1</option>
-    				<option selected>Batch2</option>
-    				<option>Batch3</option>
+   					 
 					</select>
 				</td>
 			</tr>
@@ -81,38 +127,18 @@ require(["dojo/parser", "dijit/form/Form", "dijit/form/Button", "dijit/form/Vali
          </tr>
 				{% endfor %}  
 			</tr>
-			<tr>
-				<td>
-					<label for="added_date">Added Date:</label>
-				</td>
-				<td>
-					<input type="text" id="added_date" name="added_date" required="true" data-dojo-type="dijit/form/DateTextBox"/>
-				</td>
-			</tr>
-      <tr>
-				<td>
-					<label for="event_date">Event Date:</label>
-				</td>
-				<td>
-					<input type="text" id="event_date" name="event_date" required="true" data-dojo-type="dijit/form/DateTextBox"/>
-				</td>
-			</tr>
-      <tr>
-				<td>
-					<label for="sdevice">Source Device:</label>
-				</td>
-				<td>
-					<select data-dojo-type="dijit/form/ComboBox" id="sdevice" name="sdevice">
-    				<option>Thumb reader</option>
-    				<option selected>Manual entry</option>
-          </select>
-				</td>
-			</tr>
 		</table>
 		<button data-dojo-type="dijit/form/Button" type="submit" name="submitButton" value="Submit">Submit</button>
 		<button data-dojo-type="dijit/form/Button" type="reset">Reset</button>
 
 </div>
+<script type="dojo/on" data-dojo-event="onchange">
+				var select = dijit.byId('ttslot');
+
+    			select.on('change', function(evt) {
+       			 alert('myselect_event');
+    			});
+			</script>
 </body>
 </html>
 
