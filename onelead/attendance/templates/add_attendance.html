@@ -3,7 +3,7 @@
 {% block formcontent %}
 
 <script>
-require(["dojo/parser", "dijit/form/Form", "dijit/form/Button", "dijit/form/ValidationTextBox", "dijit/form/DateTextBox", "dojox/validate/web", "dijit/form/Textarea", "dijit/form/ComboBox", "dijit/form/CheckBox","dijit/form/Select"]);
+require(["dojo/parser", "dijit/form/Form", "dijit/form/Button", "dijit/form/ValidationTextBox", "dijit/form/DateTextBox", "dojox/validate/web", "dijit/form/Textarea", "dijit/form/ComboBox", "dijit/form/CheckBox","dijit/form/Select",'dojox/grid/DataGrid','dojo/data/ItemFileWriteStore']);
 </script>
 </head>
 <body class="claro">
@@ -43,32 +43,33 @@ require(["dojo/parser", "dijit/form/Form", "dijit/form/Button", "dijit/form/Vali
 			require(["dijit/form/Select", "dojo/store/Memory",
 						"dojo/json","dojo/domReady!"],
 						function(Select, Memory, json){
-							require(['dojo/_base/xhr'], function(xhr){
+							require(['dojo/_base/xhr',"dojo/dom-construct","dojo/dom","dojo/_base/lang","dijit/registry"], function(xhr,domConstruct,dom, lang,registry){
 							xhr.get({
 								url:"/attendance/getslots.json", handleAs:"text",
 								content: {
 									date: dojo.byId("added_date").value
 								},
 								load: function(data){
-									var stateStore = new Memory({
-									idProperty: "id",
-									data: json.parse(data)
-								});
-	 
-								// create Select widget, populating its options from the store
-									var select = new Select({
-									name: "timeslot",
-									store: stateStore,
-									style: "width: 200px;",
-									labelAttr: "summary",
-									 maxHeight: -1, // tells _HasDropDown to fit menu within viewport
-									onChange: function(value){
+									
+									var data= json.parse(data)
+									var ref = registry.byId("slots");
+									ref.removeOption(ref.getOptions());
+									var count=0
+									
+									for (var key in data) {
+											//var node = domConstruct.create("option", {value:data[key]['id'],label:data[key]['summary']});
+											//domConstruct.place(node, ref);
+											ref.addOption(lang.clone(data[key]));
+											//alert(key + " -> " + data[key]['summary']);
+											count=count+1;
+ 											
 									}
-								}, "slots");
-								select.startup();
-					
-
-
+									if(count==0)
+									{
+										ref.addOption(lang.clone({value: "0",label: "No slots available",selected: true }))
+									}
+									
+									
 							}
 							});
 					});
@@ -77,6 +78,16 @@ require(["dojo/parser", "dijit/form/Form", "dijit/form/Button", "dijit/form/Vali
            
         });
 		}
+
+		function fillStudents()
+		{
+			var myNewItem = {adm_no: "123", name: "Mahesh", status:"Present"};
+
+        	stud_store.newItem(myNewItem);
+        	
+		}
+
+
 		</script>
 
 
@@ -94,51 +105,42 @@ require(["dojo/parser", "dijit/form/Form", "dijit/form/Button", "dijit/form/Vali
 					<label for="ttslot">Time Table Slot:</label>
 				</td>
 				<td>
-				<div id='slots' ></div>
-   					
-					
+				<select id="slots" name="slots" data-dojo-type="dijit/form/Select" onChange="fillStudents()">
+				</select>
+   			
 				</td>
 			</tr>
-      		<tr>
-				<td>
-					<label for="sbatch">Batch:</label>
-				</td>
-				<td>
-					<select data-dojo-type="dijit/form/ComboBox" id="sbatch" name="sbatch">
-   					 
-					</select>
-				</td>
-			</tr>
-      <tr>
-      <td>
-        <input id="present" name="present" data-dojo-type="dijit/form/CheckBox" value="test"/> <label for="present">Enable if marking present students</label>
-         </td>
-			</tr>
-			<tr>
-				<td>
-					<label for="students">Enable to mark attendance:</label>
-				</td>
-				     
-         {% for student in student_list %}
-         <tr>
-         <td> 
-        <input id="student{{student.id}}" name="student{{student.id}}" data-dojo-type="dijit/form/CheckBox" value="{{student.id}}" /> <label for="student">{{  student.name }}</label>
-         </td>
-         </tr>
-				{% endfor %}  
-			</tr>
+      		
+
 		</table>
+		<script >
+		var data = {
+          identifier: "id",
+          items: []
+        };
+        </script>
+		<span data-dojo-type="dojo.data.ItemFileWriteStore"
+   			 data-dojo-id="stud_store">
+		</span>
+
+		
+		<table data-dojo-type="dojox.grid.DataGrid" 
+		data-dojo-props="store:stud_store", style="width: 520px; height: 250px;">
+  			<thead>
+    		<tr>
+			      <th field="adm_no" width="160px">Adm No</th>
+			      <th field="name" width="160px">Name</th>
+			      <th field="status" width="160px">Present</th>
+			    </tr>
+			 </thead>
+		</table>
+
+
 		<button data-dojo-type="dijit/form/Button" type="submit" name="submitButton" value="Submit">Submit</button>
 		<button data-dojo-type="dijit/form/Button" type="reset">Reset</button>
 
 </div>
-<script type="dojo/on" data-dojo-event="onchange">
-				var select = dijit.byId('ttslot');
 
-    			select.on('change', function(evt) {
-       			 alert('myselect_event');
-    			});
-			</script>
 </body>
 </html>
 

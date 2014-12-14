@@ -1,4 +1,7 @@
-			<label for="">Drop down Date box:</label>
-<input type="text" name="slots" id="slots" 
-    data-dojo-type="dijit/form/TextBox"
-    required="true" />
+<label for="slot">Events on the day</label>
+<select data-dojo-type="dijit/form/Select" id="slot" name="slot">
+{% for slot in slot_list %}
+<option value="{{slot.id}}">{{ slot.summary }}</option>
+    		{% endfor %}
+</select>
+

@@ -1,127 +1,174 @@
-{% extends "time_base.html" %}
-
-{% block formcontent %}
-<script>
-require(["dojo/parser", "dijit/form/Form", "dijit/form/Button", "dijit/form/ValidationTextBox", "dijit/form/DateTextBox"]);
+<!DOCTYPE HTML>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Demo: Layout with Dijit</title>
+        <link rel="stylesheet" href="/static/style.css" media="screen">
+        <link rel="stylesheet" href="/static/main.css" media="screen">
+        <link rel="stylesheet" href="/static/dijit/themes/claro/claro.css" media="screen">
+        <link rel="stylesheet" href="/static/dojox/grid/resources/Grid.css" />
+		<link rel="stylesheet" href="/static/dojox/grid/resources/claroGrid.css" />
+		<link rel="stylesheet" href="/static/dojox/calendar/themes/claro/Calendar.css">
+        <!-- load dojo and provide config via data attribute -->
+        <script src="/static/dojo/dojo.js"
+        data-dojo-config="parseOnLoad: true">
 </script>
-
 <script>
-require(["dojo/parser", "dojo/ready", "dojox/calendar/Calendar","dojo/store/Observable", "dojo/store/Memory"],
-function(parser, ready, Calendar,Observable,Memory){
-	ready(function(){
-		var someData = [
-	{
-		id: 0,
-		summary: "Event 1",
-		startTime: new Date(2012, 0, 1, 10, 0),
-		endTime: new Date(2012, 0, 1, 12, 0)
-	},
-	{
-		id: 0,
-		summary: "Event 1",
-		startTime: new Date(2012, 0, 2, 10, 0),
-		endTime: new Date(2012, 0, 2, 12, 0)
-	}
-	];
+    dojo.require("dojo.parser");
+    dojo.require("dijit.layout.BorderContainer");
+    dojo.require("dijit.layout.TabContainer");
+    dojo.require("dijit.layout.ContentPane");
+    dojo.require("dijit.TitlePane");  
+	dojo.require("dijit.form/CheckBox"); 
+	dojo.require("dijit.form/TextBox");
+	dojo.require("dijit.form/DateTextBox" );
+	dojo.require("dijit.form/TimeTextBox"); 
+	dojo.require("dijit.form/Button") ;
+	dojo.require("dijit.form/ComboBox");
+	dojo.require("dijit.Dialog");
+    </script>
+<script>    
 
-	calendar = new Calendar({
-		date: new Date(),
-		store: new Observable(new Memory({data: someData})),
-		dateInterval: "week",
-		props:"matrixViewProps:{expandDuration:0,refStartTime:12.00}",
-		style: "position:relative;width:500px;height:500px"
-	}, "calender");
-	
-	
-	id=0;
-	var createItem = function(view, d, e, subColumn){
-	  // create item by maintaining control key
-		if(!e.ctrlKey || e.shiftKey || e.altKey){
-			return;
-		}
-		var start, end;
-		var colView = calendar.columnView;
-		var cal = calendar.dateModule;
-		if(view == colView){
-			start = calendar.floorDate(d, "minute", colView.timeSlotDuration);
-			end = cal.add(start, "minute", colView.timeSlotDuration);
-		}else{
-			start = calendar.floorToDay(d);
-			end = cal.add(start, "day", 1);
-		}
-		var item = {
-			id: id,
-			summary: "New event " + id,
-			startTime: start,
-			endTime: end,
-			allDay: view.viewKind == "matrix"
-		};
-		id++;
-		
-		return item;
-	}
-	calendar.set("createOnGridClick", true);
-	calendar.set("createItemFunc", createItem);
-	
-	
-	
-
-	}
-)}
-);
 </script>
-	
-<table>
-	<tr>
-		<td>
-			<div id=calender>
-			</div>
-		</td>
-		<td>
-			<div data-dojo-type="dijit/form/Form" id="myForm" data-dojo-id="myForm"
-			encType="multipart/form-data" action="" method="">
-				<script type="dojo/on" data-dojo-event="reset">
-					return confirm('Press OK to reset widget values');
+</head>
+
+<body class="claro">
+    <div id="appLayout" class="demoLayout" data-dojo-type="dijit.layout.BorderContainer"
+            data-dojo-props="design: 'headline'">
+			<div class="centerPanel" data-dojo-type="dijit.layout.ContentPane" data-dojo-props="region: 'center'">
+				<script>
+				require(["dojo/parser", "dijit/form/Form", "dijit/form/Button", "dijit/form/ValidationTextBox", "dijit/form/DateTextBox"]);
 				</script>
 
-				<script type="dojo/on" data-dojo-event="submit">
-					if(this.validate()){
-						return confirm('Form is valid, press OK to submit');
-					}else{
-						alert('Form contains invalid data.  Please correct first');
-						return false;
+				
+
+
+				<script>
+				require(["dojo/parser", "dojo/ready", "dojox/calendar/Calendar","dojo/store/Observable", "dojo/store/Memory"],
+				function(parser, ready, Calendar,Observable,Memory){
+					ready(function(){
+						var someData = [
+					{
+						id: 0,
+						summary: "Event 1",
+						startTime: new Date(2012, 0, 1, 10, 0),
+						endTime: new Date(2012, 0, 1, 12, 0)
+					},
+					{
+						id: 0,
+						summary: "Event 1",
+						startTime: new Date(2012, 0, 2, 10, 0),
+						endTime: new Date(2012, 0, 2, 12, 0)
 					}
-					return true;
+					];
+
+					calendar = new Calendar({
+						date: new Date(),
+						store: new Observable(new Memory({data: someData})),
+						dateInterval: "week",
+						props:"matrixViewProps:{expandDuration:0,refStartTime:12.00}",
+						style: "position:relative;width:900px;height:600px"
+					}, "calender");
+					
+					
+
+					id=0;
+					var createItem = function(view, d, e, subColumn){
+					  // create item by maintaining control key
+						if(!e.ctrlKey || e.shiftKey || e.altKey){
+							return;
+						}
+						var start, end;
+						var colView = calendar.columnView;
+						var cal = calendar.dateModule;
+						if(view == colView){
+							start = calendar.floorDate(d, "minute", colView.timeSlotDuration);
+							end = cal.add(start, "minute", colView.timeSlotDuration);
+						}else{
+							start = calendar.floorToDay(d);
+							end = cal.add(start, "day", 1);
+						}
+						var item = {
+							id: id,
+							summary: "New event " + id,
+							startTime: start,
+							endTime: end,
+							allDay: view.viewKind == "matrix"
+						};
+						id++;
+						
+						dojo.byId('summary').value="event";
+						
+						dojo.byId('start_date').value=start;
+						return item;
+					}
+
+					var selectionChanged=function(item){
+
+						alert("yes");
+					};
+
+					calendar.set("createOnGridClick", true);
+					calendar.set("createItemFunc", createItem);
+					
+					calendar.on("change", function(e){							
+							selectionChanged(e.newValue);							
+						});	
+						
+						calendar.on("itemEditEnd", function(e){
+							selectionChanged(e.item);
+						});
+
+
+					}
+				)}
+				);
 				</script>
+				
+				<div id='calender'></div>
+				</div>	     
+        	<div class="edgePanel"  data-dojo-type="dijit.layout.ContentPane"  data-dojo-props="region: 'top'">Header content (top)
 
-				<table style="border: 1px solid #9f9f9f;" cellspacing="10">
-					<tr>
-						<td>
-						    <label for="name">Name:</label>
-						</td>
-						<td>
-						    <input type="text" id="name" name="name" required="true" data-dojo-type="dijit/form/ValidationTextBox"/>
-						</td>
-					</tr>
-					<tr>
-						<td>
-						    <label for="dob">Date of birth:</label>
-						</td>
-						<td>
-						    <input type="text" id="dob" name="dob" data-dojo-type="dijit/form/DateTextBox"/>
-						</td>
-					</tr>
-				</table>
+        	</div>
+        	<div id="leftCol" class="edgePanel" data-dojo-type="dijit.layout.ContentPane" 
+            data-dojo-props="region: 'left', splitter: true"  style="width:250px">
 
-				<button data-dojo-type="dijit/form/Button" type="button" onClick="console.log(myForm.getValues())">Get Values from form!</button>
-				<button data-dojo-type="dijit/form/Button" type="submit" name="submitButton" value="Submit">Submit</button>
-				<button data-dojo-type="dijit/form/Button" type="reset">Reset</button>
-			</div>
-		</td>
-	</tr>
-</table>
-	
-	
+		         <div data-dojo-type="dijit.TitlePane" data-dojo-props="title:'Event properties', style:'margin-top:10px;width:250px'" >
+				<div><span class="propertyTitle">Summary:</span></div>
+				<div id='summary' data-dojo-type="dijit.form.TextBox" style="width:225px;" ></div>
+				<div style="margin-top:10px"><span class="propertyTitle">Start:</span></div>
+				<div>
+					<div id='start_date' data-dojo-type="dijit.form.DateTextBox" style="width:120px;" ></div>
+					<div id='start_time' data-dojo-type="dijit.form.TimeTextBox" style="width:100px;" data-dojo-props="disabled:true" ></div>
+				</div>
+				<div style="margin-top:10px"><span class="propertyTitle">End:</span></div>
+				<div>
+					<div id='end_date' data-dojo-type="dijit.form.DateTextBox" style="width:120px;" data-dojo-props="disabled:true" ></div>
+					<div id='end_time' data-dojo-type="dijit.form.TimeTextBox" style="width:100px;" data-dojo-props="disabled:true" ></div>
+				</div>
+				<div style="margin-top:10px">
+					<input type="checkbox" data-dojo-attach-point="allDayCB" data-dojo-type="dijit.form.CheckBox" checked="false" data-dojo-props="disabled:true" />
+					<label for="allDayCB">All day</label>
+				</div>	
+				<div style="margin-top:10px; text-align:right">
+					<span style="text-align:left">
+						<button data-dojo-attach-point="deleteItemButton" class="deleteButton" data-dojo-type="dijit.form.Button"  data-dojo-props="disabled:true">Delete</button>
+					</span>
+					<span style="text-align:right">
+						<button data-dojo-attach-point="updateItemButton" data-dojo-type="dijit.form.Button" data-dojo-props="disabled:true" >Update</button>
+					</span>
+				</div>
 
 
-{% endblock %}
+
+
+          
+            </div>
+    </div>
+
+    
+</div>
+
+
+</body>
+		

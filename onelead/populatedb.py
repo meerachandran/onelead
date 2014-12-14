@@ -58,6 +58,18 @@ for i in range(0,10):
 	sub=Subject()
 	sub.name='History 101-'+str(random.randint(1,100))
 	sub.save()
+a_subject=Subject.objects.all()[0]
+	
+	
+SubjectMap.objects.all().delete()
+for i in range(0,1):
+	sub=SubjectMap()
+	sub.subject=a_subject
+	sub.staff=a_staff
+	sub.batch=a_live_batch
+	sub.save()
+
+a_subject_map=SubjectMap.objects.all()[0]
 
 EventTypes.objects.all().delete()
 types=['Lecture','Festival', 'Seminar' , 'project']
@@ -71,29 +83,18 @@ an_event=EventTypes.objects.all()[0]
 a_subject=Subject.objects.all()[0]
 for i in range(0,10):
 	tt=TimeTable()
-	tt.batch = a_live_batch
-	tt.event=an_event
-	tt.responsible_staff=a_staff
+	tt.sub_map=a_subject_map
 	tt.start_date_time='2014-12-'+str(random.randint(1,25))+' 08:00:00'
 	tt.end_date_time='2014-12-'+str(random.randint(1,25))+' 10:00:00'
-	tt.geo_location='Lead'
-	tt.notify='OFF'
-	tt.summary='An example event-'+str(random.randint(1,25))
-	tt.subject=a_subject
+	tt.save()
+for i in range(0,3):
+	tt=TimeTable()
+	tt.sub_map=a_subject_map
+	tt.start_date_time='2014-12-10 08:00:'+str(random.randint(10,22))
+	tt.end_date_time='2014-12-10 08:00:23'
 	tt.save()
 
-
 Attendance.objects.all().delete()
-a_time_table=TimeTable.objects.all()[0]
-a_student=Student.objects.all()[0]
-
-att=Attendance()
-att.time_table_slot=a_time_table
-att.student=a_student
-att.added_date='2014-12-14 08:00:00'
-att.source_device = 'WEB'
-att.status_of_student = 'PRESENT'
-att.save()
 
 	
 
