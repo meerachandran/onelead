@@ -14,6 +14,6 @@ urlpatterns = patterns('',
 	url(r'^faculty/', include('faculty.urls')),
 	url(r'^timetable/', include('timetable.urls')),
 	url(r'^student/', include('student.urls')),
-	
-)
+	url(r'^faculty/', include('faculty_dashboard.urls')),
 
+)

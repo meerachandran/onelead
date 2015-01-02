@@ -45,7 +45,9 @@ INSTALLED_APPS = (
 	'batch',
 	'faculty',
 	'student',
-	'timetable'
+	'timetable',
+	'faculty_dashboard',
+	
 )
 
 MIDDLEWARE_CLASSES = (

@@ -1,11 +1,10 @@
 from django.conf.urls import patterns, url,include
 
-from timetable import views
+from faculty_dashboard import views
 from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = patterns('',
-    url(r'^$', views.index, name='index'),
-     url(r'^getslots$', views.get_slots, name='get_slots'),
-      url(r'^test$', views.test, name='test')
+    url(r'^batchlist$', views.batch_list, name='batch_list'),
+    url(r'^studentlist/(?P<batchid>\d+)/$', views.student_list, name='student_list'),
     )+static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

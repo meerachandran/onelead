@@ -14,9 +14,9 @@ class Batch(models.Model):
 	class Meta:
 		verbose_name_plural = "Batches"
 		verbose_name="Batch"
-	
 
-	
+
+
 class Student(models.Model):
 	admission_no=models.CharField(max_length=20)
 	batch = models.ForeignKey(Batch)
@@ -34,7 +34,7 @@ class Student(models.Model):
 	class Meta:
 		verbose_name_plural = "Students"
 		verbose_name="Student"
-	
+
 class Staff(models.Model):
 	emp_no=models.CharField(max_length=20)
 	name=models.CharField(max_length=200)
@@ -46,7 +46,7 @@ class Staff(models.Model):
 	education_history=models.CharField(max_length=200)
 	joined_date=models.DateField('joined_date')
 	emp_type=models.CharField(max_length=20)
-	
+
 	def __unicode__(self):
 		return self.name
 	class Meta:
@@ -69,7 +69,7 @@ class SubjectMap(models.Model):
 		return self.batch.name+'/'+self.staff.name+'/'+self.subject.name
 	def __unicode__(self):
 		return  self.batch.name+'/'+self.staff.name+'/'+self.subject.name
-	
+
 class MentorShip(models.Model):
 	student= models.ForeignKey(Student)
 	staff=models.ForeignKey(Staff)
@@ -102,20 +102,17 @@ class TimeTable(models.Model):
 	class Meta:
 		verbose_name_plural = "Time Tables"
 		verbose_name="Time Table"
-	
+
 
 
 class Attendance(models.Model):
 	sub_map=models.ForeignKey(SubjectMap)
 	student=models.ForeignKey(Student)
-	date=models.DateTimeField()
+	date=models.DateField()
+	slot_no=models.CharField(max_length=2)
 	status_of_student = models.CharField(max_length=10)
 	def __unicode__(self):
 		return self.sub_map.mapName()
 	class Meta:
 		verbose_name_plural = "Attendance"
 		verbose_name="Attendance"
- 
-
-
-
