@@ -2,136 +2,120 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8">
-    <meta name="product" content="Metro UI CSS Framework">
-    <meta name="description" content="Simple responsive css framework">
-    <meta name="author" content="Sergey S. Pimenov, Ukraine, Kiev">
-
-    <link href="/static/css/metro-bootstrap.css" rel="stylesheet">
-    <link href="/static/css/metro-bootstrap-responsive.css" rel="stylesheet">
-    <link href="/static/css/iconFont.css" rel="stylesheet">
-    <link href="/static/css/docs.css" rel="stylesheet">
-    <link href="/static/css/prettify.css" rel="stylesheet">
-	<link href="/static/css/bootstrap.min.css" rel="stylesheet">
-
-
-    <!-- Load JavaScript Libraries -->
-    <script src="/static/js/jquery-1.10.2.js"></script>
-    <script src="/static/js/jquery.widget.min.js"></script>
-    <script src="/static/js/jquery.mousewheel.js"></script>
-    <script src="/static/js/prettify.js"></script>
-   	<script src="/static/js/bootstrap.min.js"></script>
+  <meta charset="utf-8">
+  <meta name="product" content="Metro UI CSS Framework">
+  <meta name="description" content="Simple responsive css framework">
+  <meta name="author" content="Sergey S. Pimenov, Ukraine, Kiev">
 
 
 
-	 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.8/angular.min.js"></script>
-   <script src="/static/js/ui-bootstrap-tpls-0.12.0.min.js"></script>
+  <link href="/static/css/docs.css" rel="stylesheet">
+  <link href="/static/css/prettify.css" rel="stylesheet">
+  <link href="/static/css/bootstrap.min.css" rel="stylesheet">
 
 
-    <!-- Metro UI CSS JavaScript plugins -->
-    <script src="/static/js/load-metro.js"></script>
-<!-- <script src="/static/customjs/attndialog.js"></script>-->
+  <!-- Load JavaScript Libraries -->
+  <script src="/static/js/jquery-1.10.2.js"></script>
+  <script src="/static/js/jquery.widget.min.js"></script>
+  <script src="/static/js/jquery.mousewheel.js"></script>
+  <script src="/static/js/prettify.js"></script>
+  <script src="/static/js/bootstrap.min.js"></script>
 
 
 
-    <!-- Local JavaScript -->
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.8/angular.min.js"></script>
+  <script src="/static/js/ui-bootstrap-tpls-0.12.0.min.js"></script>
 
-<script>
+  <script src="/static/customjs/modelapp.js"></script>
 
-  </script>
+  <!-- Metro UI CSS JavaScript plugins -->
 
-<title>Faculty Dashboard - Batches</title>
+  <!-- <script src="/static/customjs/attndialog.js"></script>-->
+
+
+
+  <!-- Local JavaScript -->
+
+
+
+  <title>Faculty Dashboard - Batches</title>
 </head>
-<body class="metro" >
+<body >
+  {% for map in maps_list %}
 
 
+  {% endfor %}
 
+  {% verbatim %}
 
-	{% for map in maps_list %}
-		<div class="tile double bg-green" >
-                <div class="tile-content">
-                    <div class="text-right padding10 ntp">
-                        <h2 class="fg-white no-margin">{{ map.subject.name }}</h2>
-                        <p class="fg-white">{{ map.batch.name }}</p>
-						<button class="button info" id="attnbutton"
-						ng-click="openAttendanceForm()">
-						Attendance </button>
-                    </div>
-                </div>
-        </div>
-	{% endfor %}
+  <div ng-app="attendance" >
 
-	{% verbatim %}
+    <div ng-controller="BatchListCtrl">
 
-
-<div  modal="attendanceModal" class="modal fade" id="attendanceModal" tabindex="-1" role="dialog" aria-labelledby="attendanceModal" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&amp;times;</button>
-            <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+      <div class="row" ng-repeat="map in batchMaps" >
+        <div class="col-sm-6 col-md-4">
+          <div class="thumbnail">
+            <div class="caption">
+              <h3>{{ map.sub_name }}</h3>
+              <p>{{ map.batch_name }}</p>
+              <p><a href="#" class="btn btn-primary" role="button" ng-click="open('h')"">Attendance</a> </p>
             </div>
-            <div class="modal-body">
-
-			<div ng-app="attendance" ng-controller="attendanceCtrl as invoice">
-
-      <div class="input-control text" data-role="datepicker"
-          data-format="d/m/yy"
-          data-position="top|bottom"
-          data-effect="none|slide|fade">
-          <input type="text">
-          <button class="btn-date" ></button>
+          </div>
+        </div>
       </div>
 
-      <div class="form-group">
-        <label for="sel1">Select list:</label>
-        <select class="form-control" id="sel1">
-            <option>1</option>
-            <option>2</option>
-            <option>3</option>
-            <option>4</option>
-          </select>
-      </div>
+    </div>
 
-        <ul>
-            <li ng-repeat="student in students">
-            <span>{{student.id}}</span>
-            <p>{{student.name}}</p>
-          </li>
-        </ul>
-
-
-      <b>Invoice:</b>
-				<div>
-				Quantity: <input type="number" min="0" ng-model="invoice.qty" required >
-				</div>
-				<div>
-				Costs: <input type="number" min="0" ng-model="invoice.cost" required >
-				<select ng-model="invoice.inCurr">
-				  <option ng-repeat="c in invoice.currencies">{{c}}</option>
-				</select>
-			  </div>
-			 <div>
-				<b>Total:</b>
-				<span ng-repeat="c in invoice.currencies">
-				 {{invoice.total(c) | currency:c}}
-				</span>
-					<button class="btn" ng-click="invoice.pay()">Pay</button>
-			  </div>
-
-			</div>
-			<script src="/static/customjs/attendance.js"></script>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
+    <div ng-controller="AttendanceCtrl">
+      <script type="text/ng-template" id="attendanceModalContent.html">
+        <div class="modal-header">
+          <h3 class="modal-title"> Attendance {{liveMapId}}</h3>
         </div>
+        <div class="modal-body">
+          <div ng-controller="DatepickerCtrl">
+            <h4>Date</h4>
+            <div class="row">
+              <div class="col-md-6">
+                <p class="input-group">
+                  <input type="text" class="form-control"
+                  datepicker-popup="{{format}}" ng-model="dt"
+                  is-open="opened"   datepicker-options="dateOptions"
+                  ng-required="true" close-text="Close" />
+                  <span class="input-group-btn">
+                    <button type="button" class="btn btn-default"
+                    ng-click="open($event)"><i class="glyphicon glyphicon-calendar">
+                    </i></button>
+                  </span>
+                </p>
+              </div>
+            </div>
+          </div>
+          <div ng-controller="ButtonsCtrl">
+            <h4>Slots</h4>
+
+            <div class="btn-group">
+              <label class="btn btn-primary" ng-model="radioModel" btn-radio="'Left'">1</label>
+              <label class="btn btn-primary" ng-model="radioModel" btn-radio="'Middle'">2</label>
+              <label class="btn btn-primary" ng-model="radioModel" btn-radio="'Right'">3</label>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-primary" ng-click="ok()">OK</button>
+          <button class="btn btn-warning" ng-click="cancel()">Cancel</button>
+        </div>
+      <div></div>
+      </script>
+
     </div>
   </div>
-</div>
 
 
 
-{% endverbatim %}
+
+
+
+
+  {% endverbatim %}
 </body>
 </html>

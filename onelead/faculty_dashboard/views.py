@@ -26,3 +26,11 @@ def student_list(request,batchid):
 	for student in studentsObjs:
 		students.append(dict(id=student.id,name=student.name))
 	return HttpResponse(json.dumps(students),content_type = "application/json")
+
+def batch_maps(request,staffid):
+	mapObjs=SubjectMap.objects.filter(staff__id=staffid)
+
+	batchMaps=[]
+	for _map in mapObjs:
+		batchMaps.append(dict(id=_map.id,batch_name=_map.batch.name,sub_name=_map.subject.name))
+	return HttpResponse(json.dumps(	batchMaps),content_type = "application/json")

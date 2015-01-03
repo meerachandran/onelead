@@ -16,17 +16,7 @@ angular.module('attendance', ["ui.bootstrap.modal"])
 
   });
 
-  $scope.openAttendanceForm() = function() {
-    $scope.showModal = true;
-  };
-
-$scope.ok = function() {
-  $scope.showModal = false;
-};
-
-$scope.cancel = function() {
-  $scope.showModal = false;
-};
+  
 
 
   this.total = function total(outCurr) {
