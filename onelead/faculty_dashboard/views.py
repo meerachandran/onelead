@@ -18,8 +18,11 @@ def batch_list(request):
 		print context
 		return HttpResponse(template.render(context))
 
-def student_list(request,batchid):
+def student_list(request,mapid):
 
+
+	_map=SubjectMap.objects.filter(id=mapid)[0]
+	batchid=_map.batch.id
 	studentsObjs=Student.objects.filter(batch__id=batchid)
 
 	students=[]

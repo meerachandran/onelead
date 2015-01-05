@@ -58,7 +58,7 @@
             <div class="caption">
               <h3>{{ map.sub_name }}</h3>
               <p>{{ map.batch_name }}</p>
-              <p><a href="#" class="btn btn-primary" role="button" ng-click="open('h')"">Attendance</a> </p>
+              <p><a href="#" class="btn btn-primary" role="button" ng-click="open(map.id)">Attendance</a> </p>
             </div>
           </div>
         </div>
@@ -100,6 +100,9 @@
             </div>
           </div>
         </div>
+
+
+
         <div class="modal-footer">
           <button class="btn btn-primary" ng-click="ok()">OK</button>
           <button class="btn btn-warning" ng-click="cancel()">Cancel</button>

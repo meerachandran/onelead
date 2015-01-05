@@ -1,4 +1,5 @@
 angular.module('attendance', ['ui.bootstrap']);
+
 angular.module('attendance').controller('AttendanceCtrl', function ($scope, $modal, $log) {
 
   $scope.items = ['item1', 'item2', 'item3'];
@@ -6,13 +7,32 @@ angular.module('attendance').controller('AttendanceCtrl', function ($scope, $mod
 
 });
 
-// Please note that $modalInstance represents a modal window (instance) dependency.
-// It is not the same as the $modal service used above.
-
-angular.module('attendance').controller('AttendanceInstanceCtrl', function ($scope, $modalInstance, items) {
 
 
+angular.module('attendance').service('dataService', function () {
 
+    this.liveBatchMapId = null;
+    this.getLiveBatchMapId  = function() {
+      return this.liveBatchMapId;
+    };
+    this.setLiveBatchMapId  = function(id){
+
+      this.liveBatchMapId=id;
+
+    };
+
+    this.studentList=null;
+    this.getStudentList = function() {
+        this.studentList= $http.get('studentlist/'+this.liveBatchMapId);
+        return this.studentList;
+      };
+});
+
+
+angular.module('attendance').controller('AttendanceInstanceCtrl', function ($scope, $modalInstance,dataService) {
+
+  $scope.liveMapId=dataService.getLiveBatchMapId();
+  $scope.students=dataService.getStudentList();
   $scope.ok = function () {
     $modalInstance.close($scope.selected.item);
   };
@@ -23,7 +43,7 @@ angular.module('attendance').controller('AttendanceInstanceCtrl', function ($sco
 });
 
 
-angular.module('attendance').controller('BatchListCtrl', function ($scope,$http,$modal, $log) {
+angular.module('attendance').controller('BatchListCtrl', function ($scope,$http,$modal, $log,dataService) {
 
   $http.get('batchmaps/1/').success(function(data) {
     $scope.batchMaps = data;
@@ -35,7 +55,7 @@ angular.module('attendance').controller('BatchListCtrl', function ($scope,$http,
   $scope.open = function (id) {
 
 
-    console.log($scope.liveMapId);
+    dataService.setLiveBatchMapId(id);
     var modalInstance = $modal.open({
       templateUrl: 'attendanceModalContent.html',
       controller: 'AttendanceInstanceCtrl',
@@ -55,7 +75,7 @@ angular.module('attendance').controller('BatchListCtrl', function ($scope,$http,
   };
 });
 
-angular.module('attendance').controller('StudentListCtrl', function ($scope,$http,$modal, $log) {
+angular.module('attendance').controller('StudentListCtrl', function ($scope,$http,$modal, $log,dataService) {
 
   $http.get('studentlist/1/').success(function(data) {
     $scope.batchMaps = data;
